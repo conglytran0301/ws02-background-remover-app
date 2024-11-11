@@ -4,7 +4,6 @@ A simple flask app to remove the background of an image with [Rembg](https://git
 
 ![Background RemoverApplication Deployment](https://github.com/user-attachments/assets/4a9a15cc-38d8-4e05-bd2a-21b6af74013b)
 
-
 ## Run it locally:
 
 ```
@@ -25,13 +24,14 @@ docker run -p 5100:5100 flask-rmbg-app
 ```
 
 # **Install AWS CLI**
+
 ```
 sudo apt install unzip -y
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
 sudo ./aws/install
 ```
- 
+
 # **Install Jenkins on Ubuntu:**
 
 ```
@@ -50,8 +50,8 @@ sudo systemctl start jenkins
 sudo systemctl status jenkins
 ```
 
-
 # **Install Docker on Ubuntu:**
+
 ```
 # Add Docker's official GPG key:
 sudo apt-get update
@@ -75,6 +75,7 @@ sudo systemctl status docker
 # **Install Trivy on Ubuntu:**
 
 Reference Doc: https://aquasecurity.github.io/trivy/v0.55/getting-started/installation/
+
 ```
 sudo apt-get install wget apt-transport-https gnupg
 wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor | sudo tee /usr/share/keyrings/trivy.gpg > /dev/null
@@ -83,11 +84,12 @@ sudo apt-get update
 sudo apt-get install trivy
 ```
 
-
 # **Install Docker Scout:**
+
 ```
 docker login       `Give Dockerhub credentials here`
 ```
+
 ```
 curl -sSfL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh | sh -s -- -b /usr/local/bin
 ```
@@ -97,7 +99,6 @@ curl -sSfL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh | 
 ```
 docker run -d --name sonar -p 9000:9000 sonarqube:lts-community
 ```
-
 
 ## Jenkins Pipeline Script:
 
@@ -203,6 +204,7 @@ pipeline {
 }
 
 ```
+
 **Phase 4: Monitoring**
 
 1. **Install Prometheus and Grafana:**
@@ -373,14 +375,14 @@ pipeline {
      scrape_interval: 15s
 
    scrape_configs:
-     - job_name: 'node_exporter'
+     - job_name: "node_exporter"
        static_configs:
-         - targets: ['localhost:9100']
+         - targets: ["localhost:9100"]
 
-     - job_name: 'jenkins'
-       metrics_path: '/prometheus'
+     - job_name: "jenkins"
+       metrics_path: "/prometheus"
        static_configs:
-         - targets: ['<your-jenkins-ip>:<your-jenkins-port>']
+         - targets: ["<your-jenkins-ip>:<your-jenkins-port>"]
    ```
 
    Make sure to replace `<your-jenkins-ip>` and `<your-jenkins-port>` with the appropriate values for your Jenkins setup.
@@ -400,7 +402,6 @@ pipeline {
    You can access Prometheus targets at:
 
    `http://<your-prometheus-ip>:9090/targets`
-
 
 ####Grafana
 
@@ -478,26 +479,25 @@ To begin monitoring your Kubernetes cluster, you'll install the Prometheus Node 
 
 1. Add the Prometheus Community Helm repository:
 
-    ```bash
-    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-    ```
+   ```bash
+   helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+   ```
 
 2. Create a Kubernetes namespace for the Node Exporter:
 
-    ```bash
-    kubectl create namespace prometheus-node-exporter
-    ```
+   ```bash
+   kubectl create namespace prometheus-node-exporter
+   ```
 
 3. Install the Node Exporter using Helm:
 
-    ```bash
-    helm install prometheus-node-exporter prometheus-community/prometheus-node-exporter --namespace prometheus-node-exporter
-    ```
+   ```bash
+   helm install prometheus-node-exporter prometheus-community/prometheus-node-exporter --namespace prometheus-node-exporter
+   ```
 
 Add a Job to Scrape Metrics on nodeip:9001/metrics in prometheus.yml:
 
 Update your Prometheus configuration (prometheus.yml) to add a new job for scraping metrics from nodeip:9001/metrics. You can do this by adding the following configuration to your prometheus.yml file:
-
 
 ```
   - job_name: 'k8s'
@@ -523,11 +523,12 @@ To deploy an application with ArgoCD, you can follow these steps, which I'll out
    After installing ArgoCD, you need to set up your GitHub repository as a source for your application deployment. This typically involves configuring the connection to your repository and defining the source for your ArgoCD application. The specific steps will depend on your setup and requirements.
 
 3. **Create an ArgoCD Application:**
-   - `name`: Set the name for your application.
-   - `destination`: Define the destination where your application should be deployed.
-   - `project`: Specify the project the application belongs to.
-   - `source`: Set the source of your application, including the GitHub repository URL, revision, and the path to the application within the repository.
-   - `syncPolicy`: Configure the sync policy, including automatic syncing, pruning, and self-healing.
+
+   - `name`: Set the name for your application
+   - `destination`: Define the destination where your application should be deployed
+   - `project`: Specify the project the application belongs to
+   - `source`: Set the source of your application, including the GitHub repository URL, revision, and the path to the application within the repository
+   - `syncPolicy`: Configure the sync policy, including automatic syncing, pruning, and self-healing
 
 4. **Access your Application**
    - To Access the app make sure port 5100 is open in your security group and then open a new tab paste your LoadBalancerUrl.elb.amazonaws.com:5100, your app should be running.
@@ -535,5 +536,5 @@ To deploy an application with ArgoCD, you can follow these steps, which I'll out
 **Phase 7: Cleanup**
 
 1. **Cleanup AWS EC2 Instances:**
-    - Terminate AWS EC2 instances that are no longer needed.
-    - Terminate EKS Cluster, Nodegroup and LoadBalancers.
+   - Terminate AWS EC2 instances that are no longer needed.
+   - Terminate EKS Cluster, Nodegroup and LoadBalancers.
